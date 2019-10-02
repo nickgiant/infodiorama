@@ -1,0 +1,68 @@
+﻿@model IList<ReadOnlyRecord[]>
+@{
+    ViewData["Title"] = "Home Page";
+  
+}
+
+<!DOCTYPE html>
+
+
+
+
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+
+    <h2>index</h2>
+    <body style="background-color: beige; font-family: Verdana, Arial;">
+
+        <table border="1" cellpadding="4">
+
+            <tr>
+
+
+                @for (int column = 0; column < Model.First().Count(); column++)
+                {
+
+                    <th>@Model.First().ElementAt(column).ColumnName</th>
+
+
+
+                }
+                <th>edit
+                <th>
+            </tr>
+
+            <tr>
+                @for (int column = 0; column < Model.First().Count(); column++)
+                {
+                    <th> @Model.First().ElementAt(column).ColumnType</th>
+
+                }
+                <th>
+                <th>
+            </tr>
+            @foreach (var row in Model)
+            {
+
+
+                <tr>
+                    @for (int column = 0; column < row.Length; column++)
+                    {
+
+
+                        <td> @row[column].Value</td>
+
+                    }
+                    <td>@Html.ActionLink("edit", "Edit", "")</td>
+                </tr>
+
+
+
+            }
+        </table>
+    </body>
+
+

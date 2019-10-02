@@ -1,0 +1,17 @@
+﻿@model EntityView
+@{
+    ViewData["Title"] = Model.Caption;
+}
+
+<h2>@Model.Caption</h2>
+<body style="background-color: beige; font-family: Verdana, Arial;">
+    <form action="" method="post">
+        @for (var f = 0; f < Model.FieldList.Count; f++)
+        {
+            <div class="editor-label">@Html.Label(Model.FieldList[f].Caption)</div>
+            <div class="editor-field">@Html.EditorFor(model => Model.FieldList[f].Name)</div>
+        }
+
+        <p><input type="submit" value=" Add " /></p>
+    </form>
+</body>
