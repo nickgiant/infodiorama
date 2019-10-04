@@ -1,0 +1,63 @@
+﻿@model IList<ReadOnlyRecord[]>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2>index</h2>
+<hr />
+
+<body background-color: lightsteelblue; font-family: Verdana, Arial;">
+
+    <table border="1" cellpadding="4">
+
+        <tr>
+
+
+            @for (int column = 0; column < Model.First().Count(); column++)
+            {
+
+                <th>@Model.First().ElementAt(column).ColumnName</th>
+
+
+
+            }
+            <th>edit
+            <th>
+        </tr>
+
+        <tr>
+            @for (int column = 0; column < Model.First().Count(); column++)
+            {
+                <th> @Model.First().ElementAt(column).ColumnType</th>
+
+            }
+            <th>edit
+            <th>
+        </tr>
+        @foreach (var row in Model)
+        {
+
+
+            <tr>
+                @for (int column = 0; column < row.Length; column++)
+                {
+
+
+                    <td> @row[column].Value</td>
+
+                }
+
+                <td><a href="Default/Edit/@row[0].Value">edit</a> </td>
+            </tr>
+
+
+
+        }
+    </table>
+</body>
+
+

@@ -1,0 +1,43 @@
+﻿@model EntityView
+@{
+    //Model.Caption
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>@Model.Caption</h2>
+<hr />
+<body background-color: lightsteelblue; font-family: Verdana, Arial;>
+    <form asp-action="Edit" asp-controller="Default" method="post">
+        <div class="text-danger"></div>
+    
+            @for (var f = 0; f < Model.FieldList.Count; f++)
+            {
+               
+                    object FieldValue = "";
+                    for (var x = 0; x < Model.Record[0].Count(); x++)
+                    {
+
+                    if (Model.FieldList[f].Name.ToLower().Equals(Model.Record[0].ElementAt(x).ColumnName.ToLower()))
+                    {
+                    FieldValue = Model.Record[0].ElementAt(x).Value;
+                    break;
+                    }
+                    else { FieldValue = "-"; }
+                    }
+
+                    <div class="form-group">
+                        
+                            <label asp-for="@Model.FieldList[f].Name" class="editor-label">@Model.FieldList[f].Caption</label>
+                  
+                            <input asp-for="@Model.FieldList[f].Name" class="form-control" placeholder="@Model.FieldList[f].Caption" type="text" id="@Model.FieldList[f].Name" name="@Model.FieldList[f].Name" data-val="true" data-val-required="required" value="@FieldValue" />
+                            <span asp-validation-for="@Model.FieldList[f].Name" class="text-danger"></span>
+                        
+                    </div>
+                
+            }
+       
+        <p><input type="submit" value="update" /></p>
+    </form>
+</body>
