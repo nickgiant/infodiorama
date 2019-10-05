@@ -43,24 +43,27 @@ namespace infodiorama.Controllers
         
         public void Update(string FieldString, int id)
         {
-
+            
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
+                string sqlupdate = $"UPDATE {entityView.Table} SET {FieldString} WHERE {entityView.PrimaryKey} LIKE {id}";
+                Console.WriteLine(sqlupdate);
 
 
-                string sqlupdate = $"UPDATE {entityView.Table} SET {FieldString} WHERE {entityView.PrimaryKey} LIKE {id}"; ;
-                SqlCommand command = new SqlCommand(sqlupdate, connection);
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
+                                SqlCommand command = new SqlCommand(sqlupdate, connection);
+                               command.CommandType = CommandType.Text;
+                                connection.Open();
+                                command.ExecuteNonQuery();// error
+                                connection.Close();
+                
             }
         }
 
-        public EntityView GetEntityViewWithRecords(int id)
+        public ReadOnlyRecord[] GetEntityViewWithRecords(int id)
         {
+            ReadOnlyRecord[] rec = new ReadOnlyRecord[1];
 
-
-                if (entityView.SqlViewWhere.Equals(""))
+            if (entityView.SqlViewWhere.Equals(""))
                 {
                     entityView.SqlViewWhere = $"WHERE {entityView.PrimaryKey} LIKE {id}";
                 }
@@ -70,10 +73,10 @@ namespace infodiorama.Controllers
                 }
 
                 entityView.SqlViewSelect = entityView.SqlViewSelect + " " + entityView.SqlViewWhere;
-                entityView.Record = GetRecords().ToList();
-                entityView.Record.First();
+                rec = GetRecords().ToList()[0];
+           
             
-            return entityView;
+            return rec;
         }
 
         public List<ReadOnlyRecord[]> GetRecords()
@@ -110,6 +113,7 @@ namespace infodiorama.Controllers
                         rec[c] = new ReadOnlyRecord();
                         rec[c].Column = Convert.ToInt32(c);
                         //string s = Convert.ToString(reader.GetName(c));
+                        rec[c].ColumnCaption = reader.GetName(c) as string;
                         rec[c].ColumnName = reader.GetName(c) as string;
                         rec[c].ColumnType = reader.GetDataTypeName(c) as string;//.GetFieldType(c) as string; // GetDataTypeName(c);                        
 

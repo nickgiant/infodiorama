@@ -80,49 +80,81 @@ namespace infodiorama.Controllers
 
         // POST: Default/Edit/5
         [HttpPost]
-        public IActionResult Edit([FromForm]int id, EntityView entityView)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromForm]int id, ReadOnlyRecord[] rec) //[Bind("Id,Title,Adress,Description")]
         {
-            try
+
+
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-                DbContext context = new DbContext();
-                
-                string queryfields = "";
-                for (int f = 0; f < entityView.FieldList.Count; f++)
+                try
                 {
-                    object FieldValue = "";
-                    for (var x = 0; x < entityView.Record[0].Count(); x++)
+                    // TODO: Add update logic here
+                    DbContext context = new DbContext();
+                    string queryfields = "";
+                    object fieldValue = "";
+                    for (int f = 0; f < rec.Length; f++)
+                       {
+                          // string val = HttpContext.Request.Form[rec[f].ColumnName];
+                          fieldValue = rec[f].Value;
+
+                            if (f == rec.Length - 1)
+                           {
+                               queryfields = queryfields + " " + rec[f].ColumnName + " = " + fieldValue;
+                           }
+                           else
+                           {
+                               queryfields = queryfields + " " + rec[f].ColumnName + " = " + fieldValue + ", ";
+                           }
+                           
+                       }
+                       context.Update(queryfields, id);
+                       
+
+
+
+                    /*
+                    string queryfields = "";
+                    for (int f = 0; f < entityView.FieldList.Count; f++)
                     {
-
-                        if (entityView.FieldList[f].Name.ToLower().Equals(entityView.Record[0].ElementAt(x).ColumnName.ToLower()))
+                        object FieldValue = "";
+                        for (var x = 0; x < entityView.Record[0].Count(); x++)
                         {
-                            string val = HttpContext.Request.Form[entityView.FieldList[f].Name];
-                            FieldValue = entityView.Record[0].ElementAt(x).Value;
-                            break;
+
+                            if (entityView.FieldList[f].Name.ToLower().Equals(entityView.Record[0].ElementAt(x).ColumnName.ToLower()))
+                            {
+                                string val = HttpContext.Request.Form[entityView.FieldList[f].Name];
+                                FieldValue = entityView.Record[0].ElementAt(x).Value;
+                                break;
+                            }
+                            else { FieldValue = "-"; }
                         }
-                        else { FieldValue = "-"; }
+                        if (f == entityView.FieldList.Count - 1)
+                        {
+                            queryfields = queryfields + " " + entityView.FieldList[f].Name + " = " + FieldValue;
+                        }
+                        else
+                        {
+                            queryfields = queryfields + " " + entityView.FieldList[f].Name + " = " + FieldValue + ", ";
+                        }
                     }
-                    queryfields = queryfields + " " + entityView.FieldList[f].Name + " = " + FieldValue;
+                    context.Update(queryfields, Convert.ToInt32(entityView.Record[0].ElementAt(0).Value));
+                    */
+
+                    return RedirectToAction(nameof(Index));
                 }
-
-
-
-
-                context.Update(queryfields, Convert.ToInt32( entityView.Record[0].ElementAt(0).Value));
-
-
-                return RedirectToAction(nameof(Index));
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
 
-        
 
-            // GET: Default/Delete/5
+
+        // GET: Default/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
