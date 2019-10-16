@@ -11,20 +11,16 @@ namespace infodiorama.Controllers
 {
     public class DbContext
     {
-       readonly private string connectionString = "Server=LAPTOP-6K7LN3AO\\SQLEXPRESS2017;Database=CozySmart;Trusted_Connection=True;MultipleActiveResultSets=true";
+       readonly private string connectionString = "Server=LAPTOP-6K7LN3AO\\SQLEXPRESS2017;Database=hr;Trusted_Connection=True;MultipleActiveResultSets=true";
         //string connectionString = Configuration["ConnectionStrings:DefaultConnection"]; //this.Configuration.GetConnectionString("DefaultConnection");  // 
 
         public List<EntityField> listFieldAccommodations = new List<EntityField>()
             {
-                new EntityField {Name="id",Table="Accommodations",Caption="id",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue="ini"},
-                new EntityField {Name="title",Table="Accommodations",Caption="ονομασία",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue="title"},
-                new EntityField {Name="adress",Table="Accommodations",Caption="address διευ",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue=""},
-                new EntityField {Name="description",Table="Accommodations",Caption="περιγραφή",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue=""},
-                new EntityField {Name="baths",Table="Accommodations",Caption="baths",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue=""},
-                new EntityField {Name="bedrooms",Table="Accommodations",Caption="δωμάτια",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue=""},
-                new EntityField {Name="price",Table="Accommodations",Caption="τιμή",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue=""},
-                new EntityField {Name="location",Table="Accommodations",Caption="τοποθεσία",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue=""}
-                
+                new EntityField {Name="id",Table="talent",Caption="id",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue="ini"},
+                new EntityField {Name="title",Table="talent",Caption="ονομασία",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue="title"},
+                new EntityField {Name="address",Table="talent",Caption="address διευ",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue=""},
+                new EntityField {Name="description",Table="talent",Caption="περιγραφή",Type="",GroupOfComps=0,LengthInDb=20,LengthInUi=10, RequiredOrSuggested=1,VisibleOrEditable=1, LookupType=1,LookupName="",InitialValue=""},
+                              
             };
         EntityView entityView = null;
 
@@ -32,7 +28,7 @@ namespace infodiorama.Controllers
         public DbContext()
         {
 
-             entityView = new EntityView("accommodations", "οικίες", "Accommodations", "SELECT * FROM Accommodations", "", "accommodations.id", listFieldAccommodations,null);
+             entityView = new EntityView("talents", "erg", "talent", "SELECT * FROM talent", "", "talent.id", listFieldAccommodations,null);
         }
 
         public EntityView GetEntityView()
@@ -47,7 +43,7 @@ namespace infodiorama.Controllers
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string sqlupdate = $"UPDATE {entityView.Table} SET {FieldString} WHERE {entityView.PrimaryKey} LIKE {id}";
-                Console.WriteLine(sqlupdate);
+                Console.WriteLine("****** sqlupdate" + sqlupdate);
 
 
                                 SqlCommand command = new SqlCommand(sqlupdate, connection);
@@ -59,9 +55,9 @@ namespace infodiorama.Controllers
             }
         }
 
-        public ReadOnlyRecord[] GetEntityViewWithRecords(int id)
+        public Record[] GetEntityViewWithRecords(int id)
         {
-            ReadOnlyRecord[] rec = new ReadOnlyRecord[1];
+            Record[] rec = new Record[1];
 
             if (entityView.SqlViewWhere.Equals(""))
                 {
@@ -79,12 +75,12 @@ namespace infodiorama.Controllers
             return rec;
         }
 
-        public List<ReadOnlyRecord[]> GetRecords()
+        public List<Record[]> GetRecords()
         {
            
             // string connectionString = Configuration["ConnectionStrings:DefaultConnection"]; //this.Configuration.GetConnectionString("DefaultConnection");  // 
             // Console.WriteLine(" connectionString:{0}", connectionString);
-            List<ReadOnlyRecord[]> listRecord = new List<ReadOnlyRecord[]>();
+            List<Record[]> listRecord = new List<Record[]>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -103,14 +99,14 @@ namespace infodiorama.Controllers
                 int r = 0;
                 while (reader.Read())
                 {
-                    ReadOnlyRecord[] rec = new ReadOnlyRecord[colcount];
+                    Record[] rec = new Record[colcount];
                     for (int c = 0; c < colcount; c++)   //while(reader.Read())
                     {
                     
 
                         Console.WriteLine("   rowcount:{0}  colcount{1}  GetName{2} c{3} r{4}", schemaTable.Rows.Count, colcount, reader.GetName(c), c,r);
 
-                        rec[c] = new ReadOnlyRecord();
+                        rec[c] = new Record();
                         rec[c].Column = Convert.ToInt32(c);
                         //string s = Convert.ToString(reader.GetName(c));
                         rec[c].ColumnCaption = reader.GetName(c) as string;

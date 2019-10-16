@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace infodiorama.Models
 {
-    public class ReadOnlyRecord
+    public class Record
     {
 
         public string ColumnName { get; set; }

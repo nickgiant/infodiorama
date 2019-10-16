@@ -81,7 +81,7 @@ namespace infodiorama.Controllers
         // POST: Default/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromForm]int id, ReadOnlyRecord[] rec) //[Bind("Id,Title,Adress,Description")]
+        public IActionResult Edit([FromForm]int id, Record[] rec) //[Bind("Id,Title,Adress,Description")]
         {
 
 
@@ -106,39 +106,17 @@ namespace infodiorama.Controllers
                            {
                                queryfields = queryfields + " " + rec[f].ColumnName + " = " + fieldValue + ", ";
                            }
-                           
-                       }
-                       context.Update(queryfields, id);
+                        Console.WriteLine("--- queryfields:("+f+")    " + queryfields);
+                    }
+                    Console.WriteLine("****** queryfields" + queryfields);
+                    context.Update(queryfields, id);
                        
 
 
 
                     /*
-                    string queryfields = "";
-                    for (int f = 0; f < entityView.FieldList.Count; f++)
-                    {
-                        object FieldValue = "";
-                        for (var x = 0; x < entityView.Record[0].Count(); x++)
-                        {
-
-                            if (entityView.FieldList[f].Name.ToLower().Equals(entityView.Record[0].ElementAt(x).ColumnName.ToLower()))
-                            {
                                 string val = HttpContext.Request.Form[entityView.FieldList[f].Name];
-                                FieldValue = entityView.Record[0].ElementAt(x).Value;
-                                break;
-                            }
-                            else { FieldValue = "-"; }
-                        }
-                        if (f == entityView.FieldList.Count - 1)
-                        {
-                            queryfields = queryfields + " " + entityView.FieldList[f].Name + " = " + FieldValue;
-                        }
-                        else
-                        {
-                            queryfields = queryfields + " " + entityView.FieldList[f].Name + " = " + FieldValue + ", ";
-                        }
-                    }
-                    context.Update(queryfields, Convert.ToInt32(entityView.Record[0].ElementAt(0).Value));
+
                     */
 
                     return RedirectToAction(nameof(Index));

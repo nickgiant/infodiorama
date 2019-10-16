@@ -8,7 +8,7 @@ namespace infodiorama.Models
     public class EntityView
     {
 
-        public EntityView(string NameIn, string CaptionIn, string TableIn, string SqlViewSelectIn, string SqlViewWhereIn, string PrimaryKeyIn,List<EntityField> FieldListIn, List<ReadOnlyRecord[]> RecordIn)
+        public EntityView(string NameIn, string CaptionIn, string TableIn, string SqlViewSelectIn, string SqlViewWhereIn, string PrimaryKeyIn,List<EntityField> FieldListIn, List<Record[]> RecordIn)
         {
             Name = NameIn;
             Caption = CaptionIn;
@@ -26,6 +26,6 @@ namespace infodiorama.Models
         public string SqlViewWhere { get; set; }
         public string PrimaryKey { get; set; }
         public List<EntityField> FieldList { get; set; }
-        public List<ReadOnlyRecord[]> Record { get; set; }
+        public List<Record[]> Record { get; set; }
     }
 }
